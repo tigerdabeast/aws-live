@@ -30,17 +30,16 @@ def home():
 def about():
     return render_template('www.intellipaat.com')
 
-
-@app.route("/addemp", methods=['POST'])
 def AddEmp():
     emp_id = request.form['emp_id']
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    pri_skill = request.form['pri_skill']
-    location = request.form['location']
+    name = request.form['name']
+    current_work = request.form['current_work']
+    work_hour = request.form['work_hour']
+    work_location = request.form['work_location']
+    montly_salary=request.form['monthly_salary']
     emp_image_file = request.files['emp_image_file']
 
-    insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s)"
+    insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s, %s)"
     cursor = db_conn.cursor()
 
     if emp_image_file.filename == "":
@@ -48,9 +47,9 @@ def AddEmp():
 
     try:
 
-        cursor.execute(insert_sql, (emp_id, first_name, last_name, pri_skill, location))
+        cursor.execute(insert_sql, (emp_id, name, current_work, work_hour, work_location, montly_salary))
         db_conn.commit()
-        emp_name = "" + first_name + " " + last_name
+        emp_name = " " + name + " " 
         # Uplaod image file in S3 #
         emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
         s3 = boto3.resource('s3')
